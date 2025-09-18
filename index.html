@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paddy website</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body>
+    <header>
+        <nav class="custom-nav">
+            <div class="navbar bg-base-100 md:w-4/5 w-full mx-auto md:p-5 p-3">
+                <div class="navbar-start">
+                    <div class="dropdown">
+                        <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h8m-8 6h16" />
+                            </svg>
+                        </div>
+                        <ul tabindex="0"
+                            class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                            <li><a class="text-base">Home</a></li>
+                            <li><a class="text-base">Shop</a></li>
+                            <li><a class="text-base">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="flex items-center ">
+                        <img src="images/logo.webp" alt="paddy logo" class="h-5 w-5 mr-2">
+                        <a class="text-2xl">Peddy</a>
+                    </div>
+
+                </div>
+                <div class="navbar-center hidden lg:flex">
+                    <ul class="menu menu-horizontal space-x-5">
+                        <li><a id="btn-home" class="text-base active-btn" onclick="navLinks('btn-home')">Home</a></li>
+                        <li><a id="btn-shop" class="text-base active-btn" onclick="navLinks('btn-shop')">Shop</a></li>
+                        <li><a id="btn-contact" class="text-base active-btn"
+                                onclick="navLinks('btn-contact')">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="navbar-end">
+                    <div class="dropdown dropdown-end">
+                        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                            <div class="w-10 rounded-full">
+                                <img alt="Tailwind CSS Navbar component"
+                                    src="https://img.icons8.com/?size=100&id=15263&format=png&color=000000" />
+                            </div>
+                        </div>
+                        <ul tabindex="0"
+                            class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow ">
+                            <li>
+                                <a class="justify-between text-sm">
+                                    Profile
+                                    <span class="badge">New</span>
+                                </a>
+                            </li>
+                            <li><a class="text-sm">Settings</a></li>
+                            <li><a class="text-sm">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+    <main>
+        <!-- hero section -->
+        <section class="hero md:min-h-screen min-h-[700px] mx-auto">
+            <div class="flex flex-col items-center justify-center lg:w-3/5 md:w-4/5 w-9/10 text-center space-y-7">
+                <p class="text-gray-500 text-base">Bringing Families Together </p>
+                <h1 class="md:text-6xl text-5xl font-semibold">Your Path to Adoption <br> Starts Here</h1>
+                <p class="text-sm text-gray-600">It is a long established fact that a reader will be distracted by the
+                    readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has
+                    a.</p>
+                <button class="btn rounded-xl bg-[#0E7A81] text-white">View More</button><img src="images/pet.webp"
+                    alt="cat and dog">
+            </div>
+
+        </section>
+
+        <!-- best friend section -->
+        <section class="md:my-15 my-8">
+            <div
+                class="flex flex-col items-center justify-center lg:w-3/7 md:w-4/5 w-9/10 text-center space-y-5 mx-auto">
+                <h1 class="text-3xl font-semibold">Adopt Your Best Friend</h1>
+                <p class="text-sm text-gray-600 text-center">It is a long established fact that a reader will be
+                    distracted by the readable content of a page when looking at its layout. The point of using Lorem
+                    Ipsum is that it has a.</p>
+            </div>
+        </section>
+
+
+        <!-- categories section -->
+        <section class="md:w-4/5 w-full mx-auto">
+            <div id="category-container"
+                class="grid md:grid-cols-4 grid-cols-2 items-center justify-center md:gap-10 gap-2 lg:w-4/6 md:w-7/8 w-4/5 mx-auto md:px-5 px-2">
+            </div>
+
+            <!-- sort div -->
+            <div class="flex items-center justify-between my-10 px-5">
+                <p class="md:text-2xl text-xl font-semibold">Best deal for you</p>
+                <div>
+                    <!-- You can open the modal using ID.showModal() method -->
+                    <button class="btn md:text-xl text-base rounded-lg bg-[#0E7A81] text-white" onclick="my_modal_3.showModal()">Sort By Price</button>
+                    <dialog id="my_modal_3" class="modal">
+                        <div class="modal-box">
+                            <form method="dialog">
+                                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                            </form>
+                            <h3 class="text-lg font-bold">Hello!</h3>
+                            <p class="py-4">Press ESC key or click on ✕ button to close</p>
+                        </div>
+                    </dialog>
+                </div>
+            </div>
+
+
+
+        </section>
+    </main>
+
+    <script src="js/videos.js"></script>
+</body>
+
+</html>
