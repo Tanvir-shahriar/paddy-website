@@ -1,11 +1,10 @@
-// JS
-
 console.log("Videos page is loaded");
 
-// Keep track of current category for Show All
+// Track current category and current cards for sorting
 let currentCategory = null;
+let currentCards = [];
 
-// Dynamic navbar links (optional)
+// Dynamic navbar links
 const navLinks = (id) => {
   const btn = document.getElementById(id);
   const activeBtn = document.getElementsByClassName("active-btn");
@@ -15,7 +14,7 @@ const navLinks = (id) => {
   btn.classList.add("bg-red-500", "text-white");
 };
 
-// Load categories from API
+// Load categories
 const loadCategories = async () => {
   try {
     const res = await fetch("https://openapi.programming-hero.com/api/peddy/categories");
@@ -33,7 +32,6 @@ const displayCategories = (categories) => {
 
   categories.forEach((category) => {
     const categoryDiv = document.createElement("div");
-
     categoryDiv.classList.add(
       "flex",
       "border",
@@ -53,15 +51,9 @@ const displayCategories = (categories) => {
       <button class="lg:text-2xl md:text-base text-base text-center cursor-pointer">${category.category}</button>
     `;
 
-    // Click anywhere on the div
     categoryDiv.addEventListener("click", () => {
-      // Remove active class from all category buttons
-      const allCategories = categoryContainer.children;
-      for (const cat of allCategories) {
-        cat.classList.remove("active-category");
-      }
-
-      // Add active class to clicked category
+      // Remove active class from all categories
+      Array.from(categoryContainer.children).forEach(cat => cat.classList.remove("active-category"));
       categoryDiv.classList.add("active-category");
 
       // Load the category
@@ -72,48 +64,47 @@ const displayCategories = (categories) => {
   });
 };
 
-// Load category dynamically (first 3 or rest)
+// loading screen
+loadingScreen = (info) =>{
+  document.getElementById('loading-screen').classList.remove('hidden');
+  document.getElementById('loading-screen').classList.add('block');
+  setTimeout(function(){
+    loadCategoryDynamically(info);
+  }, 2000)
+}
+
+// Load category dynamically
 const loadCategoryDynamically = async (type, appendRest = false) => {
-  const categoryDiv = document.getElementsByClassName('active');
-
-
-   
-  currentCategory = type; // remember current category
-  let url = type ? 
+  currentCategory = type;
+  const url = type ? 
     `https://openapi.programming-hero.com/api/peddy/category/${type}` : 
     "https://openapi.programming-hero.com/api/peddy/pets";
 
   try {
-    const response = await fetch(url);
-    const data = await response.json();
-
+    const res = await fetch(url);
+    const data = await res.json();
     const cardContainer = document.getElementById("card-container");
-    if (!appendRest) cardContainer.innerHTML = ''; // clear first load
+    if (!appendRest) cardContainer.innerHTML = '';
 
-    let cards = data.data || data.pets || [];
-    let cardsToShow = appendRest ? cards.slice(3) : cards.slice(0, 3);
+    const cards = data.data || data.pets || [];
+    currentCards = cards; // store for sorting
 
+    const cardsToShow = appendRest ? cards.slice(3) : cards.slice(0, 3);
     cardsToShow.length ? displayCards(cardsToShow) : emptyContainer();
 
-    // Show/hide Show All button if more than 3 cards exist
     const showAllBtn = document.getElementById("showAll");
     if (!appendRest && cards.length > 3) showAllBtn.classList.remove("hidden");
     else showAllBtn.classList.add("hidden");
 
-  } catch (error) {
-    console.error("Error loading category:", error);
+  } catch (err) {
+    console.error("Error loading category:", err);
     emptyContainer();
   }
 };
 
-// Show remaining cards on Show All button click
-document.getElementById("showAll").addEventListener("click", () => {
-  const showAllBtn = document.getElementById("showAll");
-
-  // Hide the button immediately
-  showAllBtn.classList.add("hidden");
-
-  // Load all remaining cards for the current category
+// Show remaining cards
+document.getElementById("showAll")?.addEventListener("click", () => {
+  document.getElementById("showAll").classList.add("hidden");
   loadCategoryDynamically(currentCategory, true);
 });
 
@@ -139,11 +130,10 @@ const displayCards = (cards) => {
         <div class="flex gap-2">
           <button onclick="loadPhotos(${card.petId})" class="btn border-[#0E7A81]/20"><i class="fa-regular fa-thumbs-up"></i></button>
           <button class="btn text-[#0E7A81] border border-[#0E7A81]/20">Adopt</button>
-          <button class="btn text-[#0E7A81] border border-[#0E7A81]/20">Details</button>
+          <button id="${card.petId}" class="btn text-[#0E7A81] border border-[#0E7A81]/20" onclick = "loadDetails('${card.petId}')">Details</button>
         </div>
       </div>
     `;
-
     cardContainer.appendChild(cardDiv);
   });
 };
@@ -160,19 +150,16 @@ const emptyContainer = () => {
   `;
 };
 
-// Load photos for a pet
+// Load photos
 const loadPhotos = (id) => {
   fetch(`https://openapi.programming-hero.com/api/peddy/pet/${id}`)
-    .then((res) => res.json())
-    .then((data) => displayPhotos(data.petData));
+    .then(res => res.json())
+    .then(data => displayPhotos(data.petData));
 };
 
-// Display photos
 const displayPhotos = (photos) => {
   const photoContainer = document.getElementById("photo-container");
-
-  if (!Array.isArray(photos)) photos = [photos]; // single object → array
-
+  if (!Array.isArray(photos)) photos = [photos];
   photos.forEach((photo) => {
     const photoDiv = document.createElement("div");
     photoDiv.innerHTML = `<img src="${photo.image}" alt="pet image">`;
@@ -180,6 +167,43 @@ const displayPhotos = (photos) => {
   });
 };
 
+// Sort current cards by price (all loaded cards)
+const sortCurrentCards = (order) => {
+  if (!currentCards || currentCards.length === 0) return;
+
+  const sorted = [...currentCards].sort((a, b) => {
+    const priceA = a.price ? parseFloat(a.price) : 0;
+    const priceB = b.price ? parseFloat(b.price) : 0;
+    return order === 'asc' ? priceA - priceB : priceB - priceA;
+  });
+  const showAllBtn = document.getElementById("showAll");
+  showAllBtn.classList.add("hidden");
+
+  const cardContainer = document.getElementById("card-container");
+  cardContainer.innerHTML = ''; // ✅ clear old cards before adding sorted ones
+  displayCards(sorted); // display all cards
+  document.getElementById("my_modal_3").close(); // close modal
+};
+
+// Load details
+loadDetails = (id) =>{
+ fetch(`https://openapi.programming-hero.com/api/peddy/pet/${id}`)
+ .then(res => res.json())
+ .then(data => displayDetails(data.petData))
+}
+// display details
+displayDetails = (data) =>{
+   const detailsBtn = document.getElementById('btn-details');
+ const detailsContainer = document.getElementById('details-container')
+  detailsContainer.innerHTML= `
+  <div class="flex flex-col items-center justify-center space-y-5">
+  <img class= ""object-cover h-[300px]" src = "${data.image}" alt="pet image">
+  <p>${data.pet_details}</p>
+  </div> 
+  `;
+  detailsBtn.click();
+}
+
 // Initial load
 loadCategories();
-loadCategoryDynamically(null); // null = all pets
+loadCategoryDynamically(null); // load all pets initially
