@@ -68,14 +68,6 @@ const displayCategories = (categories) => {
   });
 };
 
-// loading screen
-loadingScreen = (info) => {
-  document.getElementById("loading-screen").classList.remove("hidden");
-  document.getElementById("loading-screen").classList.add("block");
-  setTimeout(function () {
-    loadCategoryDynamically(info);
-  }, 2000);
-};
 
 // Load category dynamically
 const loadCategoryDynamically = async (type, appendRest = false) => {
@@ -159,7 +151,7 @@ const displayCards = (cards) => {
           <button onclick="loadPhotos(${
             card.petId
           })" class="btn border-[#0E7A81]/20"><i class="fa-regular fa-thumbs-up"></i></button>
-          <button class="btn text-[#0E7A81] border border-[#0E7A81]/20" onclick="loadAdopt(${card.petId})">Adopt</button>
+          <button id="btn-${card.petId}" class="btn text-[#0E7A81] border border-[#0E7A81]/20" onclick="loadAdopt(${card.petId})">Adopt</button>
           <button id="${
             card.petId
           }" class="btn text-[#0E7A81] border border-[#0E7A81]/20" onclick = "loadDetails('${
@@ -238,7 +230,7 @@ displayDetails = (data) => {
   const detailsContainer = document.getElementById("details-container");
   detailsContainer.innerHTML = `
   <div class="flex flex-col items-center justify-center space-y-5">
-    <img class= ""object-cover h-[300px]" src = "${data.image}" alt="pet image">
+    <img class= ""object-cover h-full w-full" src = "${data.image}" alt="pet image">
   </div> 
   <h1 class="text-xl">${data.pet_name}</h1>
 
@@ -316,6 +308,8 @@ loadAdopt = (id) => {
 
   const adoptBtn = document.getElementById('adopt-btn');
   if (adoptBtn) adoptBtn.click();
+  const adoptUniqueBtn = document.getElementById(`btn-${id}`);
+  adoptUniqueBtn.classList.add("btn-disabled","opacity-50", "cursor-not-allowed", "hover:opacity-70", "hover:bg-[#0E7A81]/10");
 }
 
 
