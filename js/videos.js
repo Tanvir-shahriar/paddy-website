@@ -159,7 +159,7 @@ const displayCards = (cards) => {
           <button onclick="loadPhotos(${
             card.petId
           })" class="btn border-[#0E7A81]/20"><i class="fa-regular fa-thumbs-up"></i></button>
-          <button class="btn text-[#0E7A81] border border-[#0E7A81]/20">Adopt</button>
+          <button class="btn text-[#0E7A81] border border-[#0E7A81]/20" onclick="loadAdopt(${card.petId})">Adopt</button>
           <button id="${
             card.petId
           }" class="btn text-[#0E7A81] border border-[#0E7A81]/20" onclick = "loadDetails('${
@@ -279,6 +279,45 @@ displayDetails = (data) => {
   `;
   detailsBtn.click();
 };
+
+// adopt button functionality
+loadAdopt = (id) => {
+  const adoptContainer = document.getElementById('adopt-container');
+  adoptContainer.innerHTML = `
+    <img src="https://img.icons8.com/?size=100&id=108783&format=png&color=000000" alt="deal done">
+    <h1>Congrats</h1>
+    <p>Adoption process has started for your pets</p>
+    <span class="countdown font-mono text-6xl" id="countdown">
+      <span style="--value:3;" aria-live="polite" aria-label="3">3</span>
+    </span>
+  `;
+
+  const countdownElement = document.querySelector('#countdown span');
+  let value = 3;
+
+  const interval = setInterval(() => {
+    value--;
+    if (value < 0) {
+      clearInterval(interval);
+      countdownElement.style.setProperty('--value', 0);
+      countdownElement.setAttribute('aria-label', '0');
+      adoptContainer.innerText = '';
+      adoptContainer.innerHTML = `
+      <img src = "https://img.icons8.com/?size=100&id=108641&format=png&color=000000" alt>
+      <p>Adoption complete!</p>
+      `;
+      return;
+    }
+
+    // Update both the CSS variable and aria-label
+    countdownElement.style.setProperty('--value', value);
+    countdownElement.setAttribute('aria-label', value);
+  }, 1000);
+
+  const adoptBtn = document.getElementById('adopt-btn');
+  if (adoptBtn) adoptBtn.click();
+}
+
 
 // Initial load
 loadCategories();
