@@ -89,8 +89,6 @@ const loadCategoryDynamically = async (type, appendRest = false) => {
     const cards = data.data || data.pets || [];
     currentCards = cards; // store for sorting
 
-    
-
     const cardsToShow = appendRest ? cards.slice(3) : cards.slice(0, 3);
     cardsToShow.length ? displayCards(cardsToShow) : emptyContainer();
 
@@ -112,7 +110,14 @@ document.getElementById("showAll")?.addEventListener("click", () => {
 
 // Display cards
 const displayCards = (cards) => {
-  const cardContainer = document.getElementById("card-container");
+  const spinner = document.getElementById('spinner');
+  spinner.classList.remove('hidden');
+  document.getElementById('showAllDiv').classList.add('hidden');
+
+  setTimeout(function(){
+    document.getElementById('showAllDiv').classList.remove('hidden');
+    spinner.classList.add('hidden');
+    const cardContainer = document.getElementById("card-container");
   cardContainer.classList.add("grid");
 
   cards.forEach((card) => {
@@ -138,6 +143,9 @@ const displayCards = (cards) => {
     `;
     cardContainer.appendChild(cardDiv);
   });
+  },2000);
+
+  
 };
 
 // Empty container if no cards
