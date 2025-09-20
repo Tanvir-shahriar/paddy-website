@@ -150,7 +150,12 @@ const displayCards = (cards) => {
 
 // Empty container if no cards
 const emptyContainer = () => {
-  const cardContainer = document.getElementById("card-container");
+  const spinner = document.getElementById('spinner');
+  spinner.classList.remove('hidden');
+
+  setTimeout(function(){
+    spinner.classList.add('hidden');
+    const cardContainer = document.getElementById("card-container");
   cardContainer.classList.remove("grid");
   cardContainer.innerHTML = `
     <div class="text-center mx-auto my-20 flex flex-col items-center space-y-5">
@@ -158,6 +163,7 @@ const emptyContainer = () => {
       <h1 class="text-3xl">There is no pets here</h1>
     </div>
   `;
+  }, 2000);
 };
 
 // Load photos
