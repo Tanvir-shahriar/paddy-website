@@ -17,7 +17,9 @@ const navLinks = (id) => {
 // Load categories
 const loadCategories = async () => {
   try {
-    const res = await fetch("https://openapi.programming-hero.com/api/peddy/categories");
+    const res = await fetch(
+      "https://openapi.programming-hero.com/api/peddy/categories"
+    );
     const data = await res.json();
     displayCategories(data.categories);
   } catch (err) {
@@ -28,7 +30,7 @@ const loadCategories = async () => {
 // Display categories dynamically
 const displayCategories = (categories) => {
   const categoryContainer = document.getElementById("category-container");
-  categoryContainer.innerHTML = '';
+  categoryContainer.innerHTML = "";
 
   categories.forEach((category) => {
     const categoryDiv = document.createElement("div");
@@ -53,7 +55,9 @@ const displayCategories = (categories) => {
 
     categoryDiv.addEventListener("click", () => {
       // Remove active class from all categories
-      Array.from(categoryContainer.children).forEach(cat => cat.classList.remove("active-category"));
+      Array.from(categoryContainer.children).forEach((cat) =>
+        cat.classList.remove("active-category")
+      );
       categoryDiv.classList.add("active-category");
 
       // Load the category
@@ -65,26 +69,26 @@ const displayCategories = (categories) => {
 };
 
 // loading screen
-loadingScreen = (info) =>{
-  document.getElementById('loading-screen').classList.remove('hidden');
-  document.getElementById('loading-screen').classList.add('block');
-  setTimeout(function(){
+loadingScreen = (info) => {
+  document.getElementById("loading-screen").classList.remove("hidden");
+  document.getElementById("loading-screen").classList.add("block");
+  setTimeout(function () {
     loadCategoryDynamically(info);
-  }, 2000)
-}
+  }, 2000);
+};
 
 // Load category dynamically
 const loadCategoryDynamically = async (type, appendRest = false) => {
   currentCategory = type;
-  const url = type ? 
-    `https://openapi.programming-hero.com/api/peddy/category/${type}` : 
-    "https://openapi.programming-hero.com/api/peddy/pets";
+  const url = type
+    ? `https://openapi.programming-hero.com/api/peddy/category/${type}`
+    : "https://openapi.programming-hero.com/api/peddy/pets";
 
   try {
     const res = await fetch(url);
     const data = await res.json();
     const cardContainer = document.getElementById("card-container");
-    if (!appendRest) cardContainer.innerHTML = '';
+    if (!appendRest) cardContainer.innerHTML = "";
 
     const cards = data.data || data.pets || [];
     currentCards = cards; // store for sorting
@@ -95,7 +99,6 @@ const loadCategoryDynamically = async (type, appendRest = false) => {
     const showAllBtn = document.getElementById("showAll");
     if (!appendRest && cards.length > 3) showAllBtn.classList.remove("hidden");
     else showAllBtn.classList.add("hidden");
-
   } catch (err) {
     console.error("Error loading category:", err);
     emptyContainer();
@@ -110,54 +113,76 @@ document.getElementById("showAll")?.addEventListener("click", () => {
 
 // Display cards
 const displayCards = (cards) => {
-  const spinner = document.getElementById('spinner');
-  spinner.classList.remove('hidden');
-  document.getElementById('showAllDiv').classList.add('hidden');
+  const spinner = document.getElementById("spinner");
+  spinner.classList.remove("hidden");
+  document.getElementById("showAllDiv").classList.add("hidden");
 
-  setTimeout(function(){
-    document.getElementById('showAllDiv').classList.remove('hidden');
-    spinner.classList.add('hidden');
+  setTimeout(function () {
+    document.getElementById("showAllDiv").classList.remove("hidden");
+    spinner.classList.add("hidden");
     const cardContainer = document.getElementById("card-container");
-  cardContainer.classList.add("grid");
+    cardContainer.classList.add("grid");
 
-  cards.forEach((card) => {
-    const cardDiv = document.createElement("div");
-    cardDiv.classList.add("card", "bg-base-100", "shadow-sm", "p-2");
+    cards.forEach((card) => {
+      const cardDiv = document.createElement("div");
+      cardDiv.classList.add("card", "bg-base-100", "shadow-sm", "p-2");
 
-    cardDiv.innerHTML = `
+      cardDiv.innerHTML = `
       <figure>
-        <img class="h-[200px] object-cover" src="${card.image}" alt="${card.pet_name}" />
+        <img class="h-[200px] object-cover" src="${card.image}" alt="${
+        card.pet_name
+      }" />
       </figure>
       <div class="card-body">
         <h2 class="card-title">${card.pet_name}</h2>
-        ${!card.breed ? `<p>Not available</p>` : `<p><i class="fa-solid fa-tags"></i> ${card.breed}</p>`}
-        ${!card.date_of_birth ? `<p>Not available</p>` : `<p><i class="fa-regular fa-calendar"></i> ${card.date_of_birth}</p>`}
-        ${!card.gender ? `<p>Not available</p>` : `<p><i class="fa-solid fa-venus-mars"></i> ${card.gender}</p>`}
-        ${!card.price ? `<p>Not available</p>` : `<p><i class="fa-solid fa-dollar-sign"></i> ${card.price}</p>`}
+        ${
+          !card.breed
+            ? `<p>Not available</p>`
+            : `<p><i class="fa-solid fa-tags"></i> ${card.breed}</p>`
+        }
+        ${
+          !card.date_of_birth
+            ? `<p>Not available</p>`
+            : `<p><i class="fa-regular fa-calendar"></i> ${card.date_of_birth}</p>`
+        }
+        ${
+          !card.gender
+            ? `<p>Not available</p>`
+            : `<p><i class="fa-solid fa-venus-mars"></i> ${card.gender}</p>`
+        }
+        ${
+          !card.price
+            ? `<p>Not available</p>`
+            : `<p><i class="fa-solid fa-dollar-sign"></i> ${card.price}</p>`
+        }
         <div class="flex gap-2">
-          <button onclick="loadPhotos(${card.petId})" class="btn border-[#0E7A81]/20"><i class="fa-regular fa-thumbs-up"></i></button>
+          <button onclick="loadPhotos(${
+            card.petId
+          })" class="btn border-[#0E7A81]/20"><i class="fa-regular fa-thumbs-up"></i></button>
           <button class="btn text-[#0E7A81] border border-[#0E7A81]/20">Adopt</button>
-          <button id="${card.petId}" class="btn text-[#0E7A81] border border-[#0E7A81]/20" onclick = "loadDetails('${card.petId}')">Details</button>
+          <button id="${
+            card.petId
+          }" class="btn text-[#0E7A81] border border-[#0E7A81]/20" onclick = "loadDetails('${
+        card.petId
+      }')">Details</button>
         </div>
       </div>
     `;
-    cardContainer.appendChild(cardDiv);
-  });
-  },2000);
-
-  
+      cardContainer.appendChild(cardDiv);
+    });
+  }, 2000);
 };
 
 // Empty container if no cards
 const emptyContainer = () => {
-  const spinner = document.getElementById('spinner');
-  spinner.classList.remove('hidden');
+  const spinner = document.getElementById("spinner");
+  spinner.classList.remove("hidden");
 
-  setTimeout(function(){
-    spinner.classList.add('hidden');
+  setTimeout(function () {
+    spinner.classList.add("hidden");
     const cardContainer = document.getElementById("card-container");
-  cardContainer.classList.remove("grid");
-  cardContainer.innerHTML = `
+    cardContainer.classList.remove("grid");
+    cardContainer.innerHTML = `
     <div class="text-center mx-auto my-20 flex flex-col items-center space-y-5">
       <img class="block" src="images/error.webp" alt="empty icon">
       <h1 class="text-3xl">There is no pets here</h1>
@@ -169,8 +194,8 @@ const emptyContainer = () => {
 // Load photos
 const loadPhotos = (id) => {
   fetch(`https://openapi.programming-hero.com/api/peddy/pet/${id}`)
-    .then(res => res.json())
-    .then(data => displayPhotos(data.petData));
+    .then((res) => res.json())
+    .then((data) => displayPhotos(data.petData));
 };
 
 const displayPhotos = (photos) => {
@@ -190,35 +215,70 @@ const sortCurrentCards = (order) => {
   const sorted = [...currentCards].sort((a, b) => {
     const priceA = a.price ? parseFloat(a.price) : 0;
     const priceB = b.price ? parseFloat(b.price) : 0;
-    return order === 'asc' ? priceA - priceB : priceB - priceA;
+    return order === "asc" ? priceA - priceB : priceB - priceA;
   });
   const showAllBtn = document.getElementById("showAll");
   showAllBtn.classList.add("hidden");
 
   const cardContainer = document.getElementById("card-container");
-  cardContainer.innerHTML = ''; // ✅ clear old cards before adding sorted ones
+  cardContainer.innerHTML = ""; // ✅ clear old cards before adding sorted ones
   displayCards(sorted); // display all cards
   document.getElementById("my_modal_3").close(); // close modal
 };
 
 // Load details
-loadDetails = (id) =>{
- fetch(`https://openapi.programming-hero.com/api/peddy/pet/${id}`)
- .then(res => res.json())
- .then(data => displayDetails(data.petData))
-}
+loadDetails = (id) => {
+  fetch(`https://openapi.programming-hero.com/api/peddy/pet/${id}`)
+    .then((res) => res.json())
+    .then((data) => displayDetails(data.petData));
+};
 // display details
-displayDetails = (data) =>{
-   const detailsBtn = document.getElementById('btn-details');
- const detailsContainer = document.getElementById('details-container')
-  detailsContainer.innerHTML= `
+displayDetails = (data) => {
+  const detailsBtn = document.getElementById("btn-details");
+  const detailsContainer = document.getElementById("details-container");
+  detailsContainer.innerHTML = `
   <div class="flex flex-col items-center justify-center space-y-5">
-  <img class= ""object-cover h-[300px]" src = "${data.image}" alt="pet image">
-  <p>${data.pet_details}</p>
+    <img class= ""object-cover h-[300px]" src = "${data.image}" alt="pet image">
   </div> 
+  <h1 class="text-xl">${data.pet_name}</h1>
+
+  <div class="grid grid-cols-2 text-xs">
+      <div class="space-y-2">
+      ${
+          !data.breed
+            ? `<p>Breed: Not available</p>`
+            : `<p><i class="fa-solid fa-tags"></i> Breed: ${data.breed}</p>`
+        }
+        ${
+          !data.gender
+            ? `<p>Gender: Not available</p>`
+            : `<p><i class="fa-solid fa-venus-mars"></i> Gender: ${data.gender}</p>`
+        }
+        ${
+          !data.vaccinated_status 
+            ? `<p>vaccinated Status : Not available</p>`
+            : `<p><i class="fa-solid fa-syringe"></i> vaccinated Status : ${data.vaccinated_status}</p>`
+        }     
+      </div>
+      <div class="space-y-2">
+      ${
+          !data.date_of_birth
+            ? `<p>Birth: Not available</p>`
+            : `<p><i class="fa-regular fa-calendar"></i> Birth: ${data.date_of_birth}</p>`
+        }
+      ${
+          !data.price
+            ? `<p>Price: Not available</p>`
+            : `<p><i class="fa-solid fa-dollar-sign"></i> Price: ${data.price}</p>`
+        }
+
+      </div>
+  </div>
+  <p class="font-semibold">Detail Information </p>
+  <p class = "text-sm text-gray-600">${data.pet_details}</p>
   `;
   detailsBtn.click();
-}
+};
 
 // Initial load
 loadCategories();
