@@ -89,6 +89,8 @@ const loadCategoryDynamically = async (type, appendRest = false) => {
     const cards = data.data || data.pets || [];
     currentCards = cards; // store for sorting
 
+    
+
     const cardsToShow = appendRest ? cards.slice(3) : cards.slice(0, 3);
     cardsToShow.length ? displayCards(cardsToShow) : emptyContainer();
 
