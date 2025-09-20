@@ -312,6 +312,32 @@ loadAdopt = (id) => {
   adoptUniqueBtn.classList.add("btn-disabled","opacity-50", "cursor-not-allowed", "hover:opacity-70", "hover:bg-[#0E7A81]/10");
 }
 
+// sticky removal
+window.addEventListener('scroll', function() {
+  var sticky = document.getElementById('sticky');
+  var footer = document.getElementById('footer');
+  
+  // Check if screen width is mobile (max-width of 768px)
+  if (window.innerWidth <= 768) {
+    // Make the sticky visible on mobile
+    sticky.style.display = 'block';
+    
+    // Check if the sticky element has reached the footer
+    var stickyRect = sticky.getBoundingClientRect();
+    var footerRect = footer.getBoundingClientRect();
+    
+    if (stickyRect.bottom >= footerRect.top) {
+      // Hide sticky element when it reaches the footer
+      sticky.style.display = 'none';
+    }
+  } else {
+    // Hide sticky element on desktop (larger than 768px)
+    sticky.style.display = 'none';
+  }
+});
+
+
+
 
 // Initial load
 loadCategories();
